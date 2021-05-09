@@ -28,7 +28,7 @@ namespace Sports.Playback.Engine
 
             while (_isPlaying && !_dataProvider.IsEnd)
             {
-                var data = await _dataProvider.Read();
+                var data = await _dataProvider.Get();
                 var playbackData = await _dataProcessor.Process(data);
 
                 Debug.Log(playbackData.Frame);

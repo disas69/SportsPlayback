@@ -31,7 +31,7 @@ namespace Sports.Playback.DataProvider
             _reader = new StreamReader(_stream, Encoding.UTF8);
         }
 
-        public async Task<string> Read()
+        public async Task<string> Get()
         {
             return await _reader.ReadLineAsync();
         }

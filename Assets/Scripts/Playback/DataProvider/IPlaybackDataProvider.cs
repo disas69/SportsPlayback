@@ -6,6 +6,6 @@ namespace Sports.Playback.DataProvider
     public interface IPlaybackDataProvider : IDisposable
     {
         bool IsEnd { get; }
-        Task<string> Read();
+        Task<string> Get();
     }
 }
