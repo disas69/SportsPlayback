@@ -12,9 +12,8 @@ namespace Sports.Playback.Engine
         private readonly IPlaybackDataProvider _dataProvider;
         private readonly IPlaybackDataProcessor _dataProcessor;
 
-        private bool _isPlaying;
-
         public PlaybackModel Model { get; }
+        public bool IsPlaying { get; private set; }
 
         public PlaybackEngine(int fps, IPlaybackDataProvider dataProvider, IPlaybackDataProcessor dataProcessor)
         {
@@ -26,9 +25,9 @@ namespace Sports.Playback.Engine
 
         public async void Start()
         {
-            _isPlaying = true;
+            IsPlaying = true;
 
-            while (_isPlaying && !_dataProvider.IsEnd)
+            while (IsPlaying && !_dataProvider.IsEnd)
             {
                 if (!Model.IsEnoughFrames())
                 {
@@ -46,7 +45,7 @@ namespace Sports.Playback.Engine
 
         public void Stop()
         {
-            _isPlaying = false;
+            IsPlaying = false;
         }
 
         public void Dispose()
