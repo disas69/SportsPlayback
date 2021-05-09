@@ -1,25 +1,27 @@
 using System;
+using System.Threading.Tasks;
 using Sports.Playback.DataProvider;
 using Sports.Playback.DataProcessor;
-using UnityEngine;
 
 namespace Sports.Playback.Engine
 {
     public class PlaybackEngine : IDisposable
     {
-        private readonly PlaybackModel _model;
+        private const int DelayMilliseconds = 1000;
+
         private readonly IPlaybackDataProvider _dataProvider;
         private readonly IPlaybackDataProcessor _dataProcessor;
 
         private bool _isPlaying;
 
-        public PlaybackModel Model => _model;
+        public PlaybackModel Model { get; }
 
         public PlaybackEngine(int fps, IPlaybackDataProvider dataProvider, IPlaybackDataProcessor dataProcessor)
         {
-            _model = new PlaybackModel(fps);
             _dataProvider = dataProvider;
             _dataProcessor = dataProcessor;
+
+            Model = new PlaybackModel(fps);
         }
 
         public async void Start()
@@ -28,12 +30,17 @@ namespace Sports.Playback.Engine
 
             while (_isPlaying && !_dataProvider.IsEnd)
             {
-                var data = await _dataProvider.Get();
-                var playbackData = await _dataProcessor.Process(data);
+                if (!Model.IsEnoughFrames())
+                {
+                    var data = await _dataProvider.Get();
+                    var playbackData = await _dataProcessor.Process(data);
 
-                Debug.Log(playbackData.Frame);
-
-                _model.Append(playbackData);
+                    Model.Append(playbackData);
+                }
+                else
+                {
+                    await Task.Delay(DelayMilliseconds);
+                }
             }
         }
 

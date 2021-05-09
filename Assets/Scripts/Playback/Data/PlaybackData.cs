@@ -5,13 +5,13 @@ namespace Sports.Playback.Data
 {
     public class PlaybackData
     {
-        public int Frame { get; }
+        public int FrameCount { get; }
         public List<TrackedObject> TrackedObjects { get; }
         public BallData BallData { get; private set; }
 
-        public PlaybackData(int frame)
+        public PlaybackData(int frameCount)
         {
-            Frame = frame;
+            FrameCount = frameCount;
             TrackedObjects = new List<TrackedObject>();
         }
 
