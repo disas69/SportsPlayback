@@ -2,6 +2,7 @@
 using Sports.Playback.DataProcessor.Soccer;
 using Sports.Playback.DataProvider;
 using Sports.Playback.Engine.Soccer;
+using Sports.Playback.View.Soccer;
 using Sports.Playback.Engine;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Sports.Playback.Player.Soccer
     {
         [SerializeField] private string _data;
         [SerializeField] private int _dataFPS;
-        [SerializeField] private Transform _target;
+        [SerializeField] private SoccerPlayView _view;
 
         private void Start()
         {
@@ -21,13 +22,13 @@ namespace Sports.Playback.Player.Soccer
         protected override PlaybackEngine<string, SoccerPlaybackData> CreateEngine()
         {
             return new SoccerPlaybackEngine(_dataFPS,
-                new LocalFilePlaybackDataProvider(Application.dataPath.Replace("Assets", _data)),
+                new LocalFilePlaybackDataProvider(Application.streamingAssetsPath + "/" + _data),
                 new SoccerPlaybackDataProcessor());
         }
 
         protected override PlaybackVisualizer<SoccerPlaybackData> CreateVisualizer()
         {
-            return new SoccerPlaybackVisualizer(Engine.Model, _target);
+            return new SoccerPlaybackVisualizer(Engine.Model, _view);
         }
     }
 }

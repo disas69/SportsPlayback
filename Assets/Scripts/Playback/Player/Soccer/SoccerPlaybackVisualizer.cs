@@ -1,27 +1,28 @@
 ﻿using Sports.Playback.Data.Soccer;
 using Sports.Playback.Engine;
+using Sports.Playback.View.Soccer;
 using UnityEngine;
 
 namespace Sports.Playback.Player.Soccer
 {
     public class SoccerPlaybackVisualizer : PlaybackVisualizer<SoccerPlaybackData>
     {
-        private Transform _target;
+        private SoccerPlayView _view;
 
-        public SoccerPlaybackVisualizer(PlaybackModel<SoccerPlaybackData> model, Transform target) : base(model)
+        public SoccerPlaybackVisualizer(PlaybackModel<SoccerPlaybackData> model, SoccerPlayView view) : base(model)
         {
-            _target = target;
+            _view = view;
         }
 
         protected override void Interpolate(float t, SoccerPlaybackData current, SoccerPlaybackData next)
         {
             if (next != null)
             {
-                _target.position = Vector3.Lerp(current.BallData.Position, next.BallData.Position, t);
+                _view.Target.position = Vector3.Lerp(current.BallData.Position, next.BallData.Position, t);
             }
             else
             {
-                _target.position = current.BallData.Position;
+                _view.Target.position = current.BallData.Position;
             }
         }
     }
