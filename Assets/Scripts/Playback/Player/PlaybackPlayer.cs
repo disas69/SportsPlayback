@@ -1,42 +1,55 @@
-﻿using Sports.Playback.DataProcessor;
-using Sports.Playback.DataProvider;
+﻿using Sports.Playback.Data;
 using Sports.Playback.Engine;
 using UnityEngine;
 
 namespace Sports.Playback.Player
 {
-    public class PlaybackPlayer : MonoBehaviour
+    public abstract class PlaybackPlayer<T1, T2> : MonoBehaviour where T2 : PlaybackData
     {
-        private PlaybackEngine _engine;
-        private PlaybackVisualizer _visualizer;
+        private bool _isPlaying;
 
-        [SerializeField] private string _data;
-        [SerializeField] private int _dataFPS;
-        [SerializeField] private int _targetFPS;
-        [SerializeField] private Transform _target;
+        protected PlaybackEngine<T1, T2> Engine { get; private set; }
+        protected PlaybackVisualizer<T2> Visualizer { get; private set; }
 
         private void Awake()
         {
-            Application.targetFrameRate = _targetFPS;
+            Engine = CreateEngine();
+            Visualizer = CreateVisualizer();
 
-            _engine = new PlaybackEngine(_dataFPS, new FilePlaybackDataProvider(Application.dataPath.Replace("Assets", _data)), new DefaultPlaybackDataProcessor());
-            _visualizer = new PlaybackVisualizer(_engine.Model, _target);
+            Application.targetFrameRate = 60;
+        }
 
-            _engine.Start();
+        protected abstract PlaybackEngine<T1, T2> CreateEngine();
+        protected abstract PlaybackVisualizer<T2> CreateVisualizer();
+
+        public void Play()
+        {
+            _isPlaying = true;
+            Engine.Start();
+        }
+
+        public void Stop()
+        {
+            _isPlaying = false;
+            Engine.Stop();
         }
 
         private void Update()
         {
-            if (_engine.IsPlaying)
+            if (_isPlaying)
             {
-                _visualizer.Update();
+                Visualizer.Update();
             }
         }
 
         private void OnDestroy()
         {
-            _engine.Stop();
-            _engine.Dispose();
+            if (_isPlaying)
+            {
+                Stop();
+            }
+
+            Engine.Dispose();
         }
     }
 }

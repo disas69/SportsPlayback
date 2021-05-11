@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Sports.Playback.Data
+namespace Sports.Playback.Data.Soccer
 {
     // Order: X-Position,Y-Position,Z-Position,BallSpeed,[ClickerFlags]
     public class BallData

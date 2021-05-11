@@ -3,8 +3,8 @@ using Sports.Playback.Data;
 
 namespace Sports.Playback.DataProcessor
 {
-    public interface IPlaybackDataProcessor
+    public interface IPlaybackDataProcessor<T1, T2> where T2 : PlaybackData
     {
-        Task<PlaybackData> Process(string data);
+        Task<T2[]> Process(T1 data);
     }
 }

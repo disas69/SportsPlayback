@@ -4,32 +4,38 @@ using UnityEngine;
 
 namespace Sports.Playback.Engine
 {
-    public class PlaybackModel
+    public class PlaybackModel<T> where T : PlaybackData
     {
         private const int BufferTimeSeconds = 3;
 
+        private readonly bool _removeUsedFrames;
+
         public int FPS { get; }
         public int FrameBuffer { get; }
-        public LinkedList<PlaybackData> Data { get; }
-        public LinkedListNode<PlaybackData> Frame { get; private set; }
+        public LinkedList<T> Data { get; }
+        public LinkedListNode<T> Frame { get; private set; }
 
-        public PlaybackModel(int fps)
+        public PlaybackModel(int fps, bool removeUsedFrames)
         {
             FPS = fps;
             FrameBuffer = BufferTimeSeconds * FPS;
-            Data = new LinkedList<PlaybackData>();
+            Data = new LinkedList<T>();
+
+            _removeUsedFrames = removeUsedFrames;
         }
 
-        public void Append(PlaybackData playbackData)
+        public void Append(T[] playbackData)
         {
-            Data.AddLast(playbackData);
+            for (var i = 0; i < playbackData.Length; i++)
+            {
+                Data.AddLast(playbackData[i]);
+                Debug.Log($"Added frame: {playbackData[i].FrameCount}. Total: {Data.Count}");
+            }
 
             if (Frame == null)
             {
                 Frame = Data.First;
             }
-
-            Debug.Log($"Added frame: {playbackData.FrameCount}");
         }
 
         public bool IsEnoughFrames()
@@ -50,6 +56,12 @@ namespace Sports.Playback.Engine
             if (Frame.Next != null)
             {
                 Frame = Frame.Next;
+
+                if (_removeUsedFrames)
+                {
+                    Data.RemoveFirst();
+                }
+
                 return true;
             }
 
@@ -61,6 +73,12 @@ namespace Sports.Playback.Engine
             if (Frame.Previous != null)
             {
                 Frame = Frame.Previous;
+
+                if (_removeUsedFrames)
+                {
+                    Data.RemoveLast();
+                }
+
                 return true;
             }
 

@@ -1,33 +1,35 @@
 using System;
 using System.Threading.Tasks;
+using Sports.Playback.Data;
 using Sports.Playback.DataProvider;
 using Sports.Playback.DataProcessor;
 
 namespace Sports.Playback.Engine
 {
-    public class PlaybackEngine : IDisposable
+    public abstract class PlaybackEngine<T1, T2> : IDisposable where T2 : PlaybackData
     {
         private const int DelayMilliseconds = 1000;
 
-        private readonly IPlaybackDataProvider _dataProvider;
-        private readonly IPlaybackDataProcessor _dataProcessor;
+        private readonly IPlaybackDataProvider<T1> _dataProvider;
+        private readonly IPlaybackDataProcessor<T1, T2> _dataProcessor;
 
-        public PlaybackModel Model { get; }
-        public bool IsPlaying { get; private set; }
+        private bool _isPlaying;
 
-        public PlaybackEngine(int fps, IPlaybackDataProvider dataProvider, IPlaybackDataProcessor dataProcessor)
+        public PlaybackModel<T2> Model { get; }
+
+        public PlaybackEngine(int fps, IPlaybackDataProvider<T1> dataProvider, IPlaybackDataProcessor<T1, T2> dataProcessor)
         {
             _dataProvider = dataProvider;
             _dataProcessor = dataProcessor;
 
-            Model = new PlaybackModel(fps);
+            Model = new PlaybackModel<T2>(fps, true);
         }
 
         public async void Start()
         {
-            IsPlaying = true;
+            _isPlaying = true;
 
-            while (IsPlaying && !_dataProvider.IsEnd)
+            while (_isPlaying && !_dataProvider.IsEnd)
             {
                 if (!Model.IsEnoughFrames())
                 {
@@ -45,7 +47,7 @@ namespace Sports.Playback.Engine
 
         public void Stop()
         {
-            IsPlaying = false;
+            _isPlaying = false;
         }
 
         public void Dispose()

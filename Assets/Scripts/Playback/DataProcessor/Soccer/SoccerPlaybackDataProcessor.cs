@@ -1,20 +1,20 @@
 ﻿using System.Threading.Tasks;
-using Sports.Playback.Data;
+using Sports.Playback.Data.Soccer;
 using UnityEngine;
 
-namespace Sports.Playback.DataProcessor
+namespace Sports.Playback.DataProcessor.Soccer
 {
-    public class DefaultPlaybackDataProcessor : IPlaybackDataProcessor
+    public class SoccerPlaybackDataProcessor : IPlaybackDataProcessor<string, SoccerPlaybackData>
     {
-        public async Task<PlaybackData> Process(string data)
+        public async Task<SoccerPlaybackData[]> Process(string data)
         {
-            return await Task<PlaybackData>.Factory.StartNew(() => ParseData(data));
+            return await Task<SoccerPlaybackData[]>.Factory.StartNew(() => ParseData(data));
         }
 
-        private PlaybackData ParseData(string data)
+        private SoccerPlaybackData[] ParseData(string data)
         {
             var items = data.Split(':');
-            var playbackData = new PlaybackData(GetInt(items[0]));
+            var playbackData = new SoccerPlaybackData(GetInt(items[0]));
 
             var trackedObjects = items[1].Split(';');
             for (var i = 0; i < trackedObjects.Length - 1; i++)
@@ -31,12 +31,12 @@ namespace Sports.Playback.DataProcessor
             }
 
             var ballDataItems = items[2].Split(',');
-            var ballPosition = GetVector3(ballDataItems[0], ballDataItems[1], ballDataItems[2]);
+            var ballPosition = GetVector3(ballDataItems[0], ballDataItems[2], ballDataItems[1]);
             var ballSpeed = GetFloat(ballDataItems[3]);
 
             playbackData.AddBallData(ballPosition, ballSpeed);
 
-            return playbackData;
+            return new []{ playbackData };
         }
 
         private static int GetInt(string input)

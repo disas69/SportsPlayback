@@ -1,22 +1,20 @@
-﻿using Sports.Playback.Engine;
+﻿using Sports.Playback.Data;
+using Sports.Playback.Engine;
 using UnityEngine;
 
 namespace Sports.Playback.Player
 {
-    public class PlaybackVisualizer
+    public abstract class PlaybackVisualizer<T> where T : PlaybackData
     {
         private readonly float _frameTime;
-        private readonly PlaybackModel _model;
+        private readonly PlaybackModel<T> _model;
 
         private float _time;
-        private Transform _target;
 
-        public PlaybackVisualizer(PlaybackModel model, Transform target)
+        public PlaybackVisualizer(PlaybackModel<T> model)
         {
             _frameTime = 1f / model.FPS;
             _model = model;
-
-            _target = target;
         }
 
         public void Update()
@@ -36,25 +34,17 @@ namespace Sports.Playback.Player
             _time += Time.deltaTime;
         }
 
+        private void Interpolate(float t)
+        {
+            Interpolate(t, _model.Frame.Value, _model.Frame.Next?.Value);
+        }
+
+        protected abstract void Interpolate(float t, T current, T next);
+
         private void NextFrame(float delta)
         {
             _model.Next();
             _time = delta;
-        }
-
-        private void Interpolate(float t)
-        {
-            var current = _model.Frame;
-            var next = current.Next;
-
-            if (next != null)
-            {
-                _target.position = Vector3.Lerp(current.Value.BallData.Position, next.Value.BallData.Position, t);
-            }
-            else
-            {
-                _target.position = current.Value.BallData.Position;
-            }
         }
     }
 }

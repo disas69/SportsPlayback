@@ -149,12 +149,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1926589623}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf88c60062a940b4e99537a495877449, type: 3}
+  m_Script: {fileID: 11500000, guid: adf02f40553457a4c89093cd1ea4f030, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: Assets/Data/match_data.dat
+  _data: Assets/Resources/Data/match_data.dat
   _dataFPS: 25
-  _targetFPS: 60
   _target: {fileID: 1957603916}
 --- !u!4 &1926589625
 Transform:
