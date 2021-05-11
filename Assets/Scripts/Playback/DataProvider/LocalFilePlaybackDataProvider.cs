@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Sports.Playback.DataProvider
 {
-    public class FilePlaybackDataProvider : IPlaybackDataProvider<string>
+    public class LocalFilePlaybackDataProvider : IPlaybackDataProvider<string>
     {
         private const int DefaultBufferSize = 4096;
         private const FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
@@ -25,7 +25,7 @@ namespace Sports.Playback.DataProvider
             }
         }
 
-        public FilePlaybackDataProvider(string path)
+        public LocalFilePlaybackDataProvider(string path)
         {
             _stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultBufferSize, DefaultOptions);
             _reader = new StreamReader(_stream, Encoding.UTF8);

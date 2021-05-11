@@ -21,7 +21,7 @@ namespace Sports.Playback.Player.Soccer
         protected override PlaybackEngine<string, SoccerPlaybackData> CreateEngine()
         {
             return new SoccerPlaybackEngine(_dataFPS,
-                new FilePlaybackDataProvider(Application.dataPath.Replace("Assets", _data)),
+                new LocalFilePlaybackDataProvider(Application.dataPath.Replace("Assets", _data)),
                 new SoccerPlaybackDataProcessor());
         }
 
