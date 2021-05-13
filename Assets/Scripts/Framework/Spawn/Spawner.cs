@@ -38,6 +38,11 @@ namespace Framework.Spawn
             }
         }
 
+        public T Spawn<T>() where T : SpawnableObject
+        {
+            return Spawn() as T;
+        }
+
         public SpawnableObject Spawn()
         {
             var spawnableObject = _objectsPool.GetNext();

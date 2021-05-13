@@ -12,7 +12,7 @@ namespace Sports.Playback.Player.Soccer
     {
         [SerializeField] private string _data;
         [SerializeField] private int _dataFPS;
-        [SerializeField] private SoccerPlayView _view;
+        [SerializeField] private SoccerMatchView _view;
 
         private void Start()
         {

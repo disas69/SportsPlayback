@@ -29,7 +29,7 @@ namespace Sports.Playback.Engine
             for (var i = 0; i < playbackData.Length; i++)
             {
                 Data.AddLast(playbackData[i]);
-                Debug.Log($"Added frame: {playbackData[i].FrameCount}. Total: {Data.Count}");
+                // Debug.Log($"Added frame: {playbackData[i].FrameCount}. Total: {Data.Count}");
             }
 
             if (Frame == null)
