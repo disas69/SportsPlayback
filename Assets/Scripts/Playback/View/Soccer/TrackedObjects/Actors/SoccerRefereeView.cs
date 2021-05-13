@@ -1,4 +1,4 @@
-﻿namespace Sports.Playback.View.Soccer
+﻿namespace Sports.Playback.View.Soccer.TrackedObjects.Actors
 {
     public class SoccerRefereeView : SoccerActorView
     {

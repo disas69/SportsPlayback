@@ -1,7 +1,7 @@
 ﻿using System;
 using Framework.Spawn;
 
-namespace Sports.Playback.View.Soccer
+namespace Sports.Playback.View
 {
     [Serializable]
     public class ViewSpawnConfig

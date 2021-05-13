@@ -3,7 +3,7 @@ using Framework.Utils.Math;
 using Sports.Playback.Data.Soccer;
 using UnityEngine;
 
-namespace Sports.Playback.View.Soccer
+namespace Sports.Playback.View.Soccer.TrackedObjects
 {
     public class TrackedObjectView : SpawnableObject
     {

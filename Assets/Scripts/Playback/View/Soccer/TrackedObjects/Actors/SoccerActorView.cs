@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Framework.Utils.Math;
+using UnityEngine;
 
-namespace Sports.Playback.View.Soccer
+namespace Sports.Playback.View.Soccer.TrackedObjects.Actors
 {
     public class SoccerActorView : TrackedObjectView
     {
@@ -9,6 +10,13 @@ namespace Sports.Playback.View.Soccer
         private readonly int _speedHash = Animator.StringToHash("Speed");
 
         [SerializeField] private Animator _animator;
+
+        private Transform _target;
+
+        public void SetTarget(Transform target)
+        {
+            _target = target;
+        }
 
         public override void SetSpeed(float speed)
         {
@@ -20,10 +28,21 @@ namespace Sports.Playback.View.Soccer
         {
             base.SetPosition(position);
 
-            if (Direction != Vector3.zero && Speed / MaxSpeed > 0.25f)
+            Quaternion rotation;
+
+            if (Direction != Vector3.zero && Speed / MaxSpeed > 0.3f)
             {
-                var rotation = Quaternion.LookRotation(Direction, Vector3.up);
-                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 7f * Time.deltaTime);
+                rotation = Quaternion.LookRotation(Direction, Vector3.up);
+                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 7.5f * Time.deltaTime);
+            }
+            else
+            {
+                var direction = (transform.position - _target.transform.position.WithY(transform.position.y)).normalized;
+                if (direction != Vector3.zero)
+                {
+                    rotation = Quaternion.LookRotation(direction, Vector3.up);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 5f * Time.deltaTime);
+                }
             }
         }
     }

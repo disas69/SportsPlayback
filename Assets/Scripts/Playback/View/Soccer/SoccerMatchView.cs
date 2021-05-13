@@ -1,8 +1,10 @@
 ﻿using System;
 using Framework.Spawn;
 using System.Collections.Generic;
-using Source.Camera;
+using Sports.Playback.Camera;
 using Sports.Playback.Data.Soccer;
+using Sports.Playback.View.Soccer.TrackedObjects;
+using Sports.Playback.View.Soccer.TrackedObjects.Actors;
 using UnityEngine;
 
 namespace Sports.Playback.View.Soccer
@@ -110,13 +112,14 @@ namespace Sports.Playback.View.Soccer
             var viewName = _configuration.GetViewName(trackedObject.TeamNumber);
             if (!string.IsNullOrEmpty(viewName))
             {
-                view = GetSpawner(viewName).Spawn<SoccerActorView>();
-                view.transform.SetParent(_viewRoot);
-                view.Setup(trackedObject);
+                var actor = GetSpawner(viewName).Spawn<SoccerActorView>();
+                actor.transform.SetParent(_viewRoot);
+                actor.SetTarget(_ball.transform);
+                actor.Setup(trackedObject);
 
-                _trackedObjects.Add(view);
+                _trackedObjects.Add(actor);
 
-                return view;
+                return actor;
             }
 
             return null;

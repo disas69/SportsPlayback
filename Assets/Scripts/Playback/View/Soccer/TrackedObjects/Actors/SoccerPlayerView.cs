@@ -1,8 +1,8 @@
 ﻿using Sports.Playback.Data.Soccer;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
-namespace Sports.Playback.View.Soccer
+namespace Sports.Playback.View.Soccer.TrackedObjects.Actors
 {
     public class SoccerPlayerView : SoccerActorView
     {

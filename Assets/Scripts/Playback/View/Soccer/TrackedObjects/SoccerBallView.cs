@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Sports.Playback.View.Soccer
+namespace Sports.Playback.View.Soccer.TrackedObjects
 {
     public class SoccerBallView : TrackedObjectView
     {
