@@ -98,7 +98,7 @@ namespace Framework.Utils.Positioning
             _lastCopiedPosition = targetPosition;
         }
 
-        private void FixedUpdate()
+        private void LateUpdate()
         {
             UpdatePosition();
         }

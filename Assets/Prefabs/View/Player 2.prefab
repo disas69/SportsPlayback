@@ -225,7 +225,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 954453510283219327, guid: 52f87054c5f160c459c0f8a43246fee1, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: Actor
       objectReference: {fileID: 0}
     - target: {fileID: 3073173914814526492, guid: 52f87054c5f160c459c0f8a43246fee1, type: 3}
       propertyPath: m_RootOrder
@@ -237,11 +237,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3073173914814526492, guid: 52f87054c5f160c459c0f8a43246fee1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3073173914814526492, guid: 52f87054c5f160c459c0f8a43246fee1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3073173914814526492, guid: 52f87054c5f160c459c0f8a43246fee1, type: 3}
       propertyPath: m_LocalRotation.w

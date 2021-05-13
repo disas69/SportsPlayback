@@ -19,8 +19,8 @@ namespace Sports.Playback.DataProcessor.Soccer
             var trackedObjects = items[1].Split(';');
             for (var i = 0; i < trackedObjects.Length - 1; i++)
             {
+                // Order: TeamNumber,TrackingID,ShirtNumber,X-Position,Y-Position,Speed;
                 var trackedObjectItems = trackedObjects[i].Split(',');
-
                 var teamNumber = GetInt(trackedObjectItems[0]);
                 var trackingID = GetInt(trackedObjectItems[1]);
                 var shirtNumber = GetInt(trackedObjectItems[2]);
@@ -30,6 +30,7 @@ namespace Sports.Playback.DataProcessor.Soccer
                 playbackData.AddTrackedObject(new TrackedObject(teamNumber, trackingID, shirtNumber, position, speed));
             }
 
+            // Order: X-Position,Y-Position,Z-Position,BallSpeed,[ClickerFlags]
             var ballDataItems = items[2].Split(',');
             var ballPosition = GetVector3(ballDataItems[0], ballDataItems[2], ballDataItems[1]);
             var ballSpeed = GetFloat(ballDataItems[3]);

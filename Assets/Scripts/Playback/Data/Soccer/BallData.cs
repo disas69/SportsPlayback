@@ -2,7 +2,6 @@
 
 namespace Sports.Playback.Data.Soccer
 {
-    // Order: X-Position,Y-Position,Z-Position,BallSpeed,[ClickerFlags]
     public class BallData
     {
         public Vector3 Position { get; }

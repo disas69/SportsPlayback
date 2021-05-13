@@ -2,7 +2,6 @@
 
 namespace Sports.Playback.Data.Soccer
 {
-    // Order: TeamNumber,TrackingID,ShirtNumber,X-Position,Y-Position,Speed;
     public class TrackedObject
     {
         public int TeamNumber { get; }

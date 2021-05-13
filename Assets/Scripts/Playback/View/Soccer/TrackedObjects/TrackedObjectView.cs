@@ -7,13 +7,15 @@ namespace Sports.Playback.View.Soccer
     public class TrackedObjectView : SpawnableObject
     {
         private VectorAverager _averager;
+        private Vector3 _lastPosition = Vector3.zero;
 
         public int TrackingID { get; private set; }
         public float Speed { get; private set; }
+        public Vector3 Direction { get; private set; }
 
         private void Awake()
         {
-            _averager = new VectorAverager(0.1f);
+            _averager = new VectorAverager(0.15f);
         }
 
         public void SetID(int id)
@@ -30,6 +32,9 @@ namespace Sports.Playback.View.Soccer
         {
             _averager.AddSample(position);
             transform.position = _averager.Value;
+
+            Direction = (_lastPosition.WithY(transform.position.y) - transform.position).normalized;
+            _lastPosition = transform.position;
         }
     }
 }

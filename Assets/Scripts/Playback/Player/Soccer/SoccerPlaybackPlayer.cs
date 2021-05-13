@@ -1,4 +1,5 @@
-﻿using Sports.Playback.Data.Soccer;
+﻿using Source.Camera;
+using Sports.Playback.Data.Soccer;
 using Sports.Playback.DataProcessor.Soccer;
 using Sports.Playback.DataProvider;
 using Sports.Playback.Engine.Soccer;
@@ -16,6 +17,7 @@ namespace Sports.Playback.Player.Soccer
 
         private void Start()
         {
+            _view.Initialize();
             Play();
         }
 

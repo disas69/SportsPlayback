@@ -1,6 +1,7 @@
 ﻿using System;
 using Framework.Spawn;
 using System.Collections.Generic;
+using Source.Camera;
 using Sports.Playback.Data.Soccer;
 using UnityEngine;
 
@@ -27,7 +28,17 @@ namespace Sports.Playback.View.Soccer
         private List<TrackedObjectView> _trackedObjects = new List<TrackedObjectView>();
 
         [SerializeField] private Transform _viewRoot;
+        [SerializeField] private CameraController _camera;
         [SerializeField] private List<SoccerViewConfig> _views;
+
+        public void Initialize()
+        {
+            _ball = GetSpawner(SoccerViewType.Ball).Spawn<TrackedObjectView>();
+            _ball.transform.SetParent(_viewRoot);
+
+            _camera.SetTarget(_ball.transform);
+            _camera.Activate(true);
+        }
 
         public void Interpolate(float t, SoccerPlaybackData current, SoccerPlaybackData next)
         {
@@ -37,12 +48,6 @@ namespace Sports.Playback.View.Soccer
 
         private void UpdateBall(float t, SoccerPlaybackData current, SoccerPlaybackData next)
         {
-            if (_ball == null)
-            {
-                _ball = GetSpawner(SoccerViewType.Ball).Spawn<TrackedObjectView>();
-                _ball.transform.SetParent(_viewRoot);
-            }
-
             if (next != null)
             {
                 var speed = Mathf.Lerp(current.BallData.Speed, next.BallData.Speed, t);
@@ -88,7 +93,7 @@ namespace Sports.Playback.View.Soccer
                 return view;
             }
 
-            if (trackedObject.ShirtNumber > 0)
+            if ((trackedObject.TeamNumber == 0 || trackedObject.TeamNumber == 1) && trackedObject.ShirtNumber > 0)
             {
                 var soccerPlayerView = GetSpawner(trackedObject.TeamNumber == 0 ? SoccerViewType.Player1 : SoccerViewType.Player2).Spawn<SoccerPlayerView>();
                 soccerPlayerView.SetNumber(trackedObject.ShirtNumber);
