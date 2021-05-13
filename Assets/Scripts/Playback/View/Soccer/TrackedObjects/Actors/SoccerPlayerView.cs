@@ -1,5 +1,6 @@
-﻿using TMPro;
+﻿using Sports.Playback.Data.Soccer;
 using UnityEngine;
+using TMPro;
 
 namespace Sports.Playback.View.Soccer
 {
@@ -7,7 +8,13 @@ namespace Sports.Playback.View.Soccer
     {
         [SerializeField] private TextMeshPro _number;
 
-        public void SetNumber(int number)
+        public override void Setup(TrackedObject trackedObject)
+        {
+            base.Setup(trackedObject);
+            SetNumber(trackedObject.ShirtNumber);
+        }
+
+        private void SetNumber(int number)
         {
             _number.text = number.ToString();
         }

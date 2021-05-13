@@ -4,8 +4,8 @@ using UnityEditor;
 
 namespace Framework.Editor
 {
-    //[CanEditMultipleObjects]
-    //[CustomEditor(typeof(UnityEngine.Object), true)]
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(UnityEngine.Object), true)]
     public class CustomInspector : UnityEditor.Editor
     {
         private List<SerializedProperty> _serializedProperties;

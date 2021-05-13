@@ -1,5 +1,4 @@
-﻿using Source.Camera;
-using Sports.Playback.Data.Soccer;
+﻿using Sports.Playback.Data.Soccer;
 using Sports.Playback.DataProcessor.Soccer;
 using Sports.Playback.DataProvider;
 using Sports.Playback.Engine.Soccer;
@@ -11,9 +10,9 @@ namespace Sports.Playback.Player.Soccer
 {
     public class SoccerPlaybackPlayer : PlaybackPlayer<string, SoccerPlaybackData>
     {
-        [SerializeField] private string _data;
-        [SerializeField] private int _dataFPS;
         [SerializeField] private SoccerMatchView _view;
+        [SerializeField] private int _dataFPS;
+        [HideInInspector] [SerializeField] private string _data;
 
         private void Start()
         {
@@ -24,7 +23,7 @@ namespace Sports.Playback.Player.Soccer
         protected override PlaybackEngine<string, SoccerPlaybackData> CreateEngine()
         {
             return new SoccerPlaybackEngine(_dataFPS,
-                new LocalFilePlaybackDataProvider(Application.streamingAssetsPath + "/" + _data),
+                new LocalFilePlaybackDataProvider(Application.streamingAssetsPath + _data.Replace("Assets/StreamingAssets", string.Empty)),
                 new SoccerPlaybackDataProcessor());
         }
 

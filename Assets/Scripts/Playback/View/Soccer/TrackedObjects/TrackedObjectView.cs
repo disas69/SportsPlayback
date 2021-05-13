@@ -1,5 +1,6 @@
 ﻿using Framework.Spawn;
 using Framework.Utils.Math;
+using Sports.Playback.Data.Soccer;
 using UnityEngine;
 
 namespace Sports.Playback.View.Soccer
@@ -18,9 +19,9 @@ namespace Sports.Playback.View.Soccer
             _averager = new VectorAverager(0.15f);
         }
 
-        public void SetID(int id)
+        public virtual void Setup(TrackedObject trackedObject)
         {
-            TrackingID = id;
+            TrackingID = trackedObject.TrackingID;
         }
 
         public virtual void SetSpeed(float speed)

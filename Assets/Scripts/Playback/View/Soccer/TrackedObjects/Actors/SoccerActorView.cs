@@ -20,7 +20,7 @@ namespace Sports.Playback.View.Soccer
         {
             base.SetPosition(position);
 
-            if (Direction != Vector3.zero)
+            if (Direction != Vector3.zero && Speed / MaxSpeed > 0.25f)
             {
                 var rotation = Quaternion.LookRotation(Direction, Vector3.up);
                 transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 7f * Time.deltaTime);

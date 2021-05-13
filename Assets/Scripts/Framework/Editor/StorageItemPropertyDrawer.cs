@@ -7,7 +7,7 @@ namespace Framework.Editor
 {
     public class StorageItemPropertyDrawer<TItem, TStorage> : PropertyDrawer where TItem : StorageItem where TStorage : Storage<TItem>
     {
-        private const string StorageFolderPath = "Assets/_Game/Resources/Storage/";
+        private const string StorageFolderPath = "Assets/Configuration/";
 
         private int _selectedIndex = -1;
 

@@ -7,33 +7,34 @@ using UnityEngine;
 
 namespace Sports.Playback.View.Soccer
 {
-    public enum SoccerViewType
-    {
-        Ball,
-        Player1,
-        Player2,
-        Referee
-    }
-
-    [Serializable]
-    public class SoccerViewConfig
-    {
-        public SoccerViewType Type;
-        public Spawner Spawner;
-    }
-
     public class SoccerMatchView : MonoBehaviour, IDisposable
     {
-        private TrackedObjectView _ball;
-        private List<TrackedObjectView> _trackedObjects = new List<TrackedObjectView>();
+        private readonly List<TrackedObjectView> _trackedObjects = new List<TrackedObjectView>();
+        private readonly List<ViewSpawnConfig> _views = new List<ViewSpawnConfig>();
 
-        [SerializeField] private Transform _viewRoot;
+        private TrackedObjectView _ball;
+
         [SerializeField] private CameraController _camera;
-        [SerializeField] private List<SoccerViewConfig> _views;
+        [SerializeField] private Transform _viewRoot;
+        [SerializeField] private ViewStorage _viewStorage;
+        [SerializeField] private DataViewConfiguration _configuration;
+
+        private void Awake()
+        {
+            for (var i = 0; i < _viewStorage.Items.Count; i++)
+            {
+                var view = _viewStorage.Items[i];
+                var spawner = new GameObject($"Spawner [{view.Name}]").AddComponent<Spawner>();
+                spawner.transform.SetParent(transform);
+                spawner.Activate(view.SpawnerSettings);
+
+                _views.Add(new ViewSpawnConfig { View = view.Name, Spawner = spawner });
+            }
+        }
 
         public void Initialize()
         {
-            _ball = GetSpawner(SoccerViewType.Ball).Spawn<TrackedObjectView>();
+            _ball = GetSpawner("Ball").Spawn<TrackedObjectView>();
             _ball.transform.SetParent(_viewRoot);
 
             _camera.SetTarget(_ball.transform);
@@ -43,7 +44,7 @@ namespace Sports.Playback.View.Soccer
         public void Interpolate(float t, SoccerPlaybackData current, SoccerPlaybackData next)
         {
             UpdateBall(t, current, next);
-            UpdatePlayers(t, current, next);
+            UpdateActors(t, current, next);
         }
 
         private void UpdateBall(float t, SoccerPlaybackData current, SoccerPlaybackData next)
@@ -54,7 +55,10 @@ namespace Sports.Playback.View.Soccer
                 _ball.SetSpeed(speed);
 
                 var position = Vector3.Lerp(current.BallData.Position, next.BallData.Position, t);
-                _ball.SetPosition(position);
+                if (_configuration.IsInBounds(position))
+                {
+                    _ball.SetPosition(position);
+                }
             }
             else
             {
@@ -63,59 +67,71 @@ namespace Sports.Playback.View.Soccer
             }
         }
 
-        private void UpdatePlayers(float t, SoccerPlaybackData current, SoccerPlaybackData next)
+        private void UpdateActors(float t, SoccerPlaybackData current, SoccerPlaybackData next)
         {
             for (var i = 0; i < current.TrackedObjects.Count; i++)
             {
                 var view = GetView(current.TrackedObjects[i]);
-
-                if (next != null)
+                if (view != null)
                 {
-                    var speed = Mathf.Lerp(current.TrackedObjects[i].Speed, next.TrackedObjects[i].Speed, t);
-                    view.SetSpeed(speed);
+                    if (next != null)
+                    {
+                        var speed = Mathf.Lerp(current.TrackedObjects[i].Speed, next.TrackedObjects[i].Speed, t);
+                        view.SetSpeed(speed);
 
-                    var position = Vector3.Lerp(current.TrackedObjects[i].Position, next.TrackedObjects[i].Position, t);
-                    view.SetPosition(position);
-                }
-                else
-                {
-                    view.SetSpeed(current.TrackedObjects[i].Speed);
-                    view.SetPosition(current.TrackedObjects[i].Position);
+                        var position = Vector3.Lerp(current.TrackedObjects[i].Position, next.TrackedObjects[i].Position, t);
+                        if (_configuration.IsInBounds(position))
+                        {
+                            view.SetPosition(position);
+                        }
+                    }
+                    else
+                    {
+                        view.SetSpeed(current.TrackedObjects[i].Speed);
+                        view.SetPosition(current.TrackedObjects[i].Position);
+                    }
                 }
             }
         }
 
         private TrackedObjectView GetView(TrackedObject trackedObject)
         {
+            if (_configuration.IsIgnored(trackedObject.TrackingID))
+            {
+                return null;
+            }
+
             var view = _trackedObjects.Find(t => t.TrackingID == trackedObject.TrackingID);
             if (view != null)
             {
                 return view;
             }
 
-            if ((trackedObject.TeamNumber == 0 || trackedObject.TeamNumber == 1) && trackedObject.ShirtNumber > 0)
+            var viewName = _configuration.GetViewName(trackedObject.TeamNumber);
+            if (!string.IsNullOrEmpty(viewName))
             {
-                var soccerPlayerView = GetSpawner(trackedObject.TeamNumber == 0 ? SoccerViewType.Player1 : SoccerViewType.Player2).Spawn<SoccerPlayerView>();
-                soccerPlayerView.SetNumber(trackedObject.ShirtNumber);
-                view = soccerPlayerView;
+                view = GetSpawner(viewName).Spawn<SoccerActorView>();
+                view.transform.SetParent(_viewRoot);
+                view.Setup(trackedObject);
 
+                _trackedObjects.Add(view);
+
+                return view;
             }
-            else
-            {
-                view = GetSpawner(SoccerViewType.Referee).Spawn<SoccerRefereeView>();
-            }
 
-            view.SetID(trackedObject.TrackingID);
-            view.transform.SetParent(_viewRoot);
-
-            _trackedObjects.Add(view);
-
-            return view;
+            return null;
         }
 
-        private Spawner GetSpawner(SoccerViewType type)
+        private Spawner GetSpawner(string view)
         {
-            return _views.Find(s => s.Type == type).Spawner;
+            var config = _views.Find(v => v.View == view);
+            if (config != null)
+            {
+                return config.Spawner;
+            }
+
+            Debug.LogError($"Can't get a spawner config with view name: {view}");
+            return null;
         }
 
         public void Dispose()

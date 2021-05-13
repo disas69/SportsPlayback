@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8504c60508609b489702dce5230f309, type: 3}
+  m_Name: ViewStorage
+  m_EditorClassIdentifier: 
+  Items:
+  - Name: Ball
+    SpawnerSettings:
+      ObjectPrefab: {fileID: 2455122938522097574, guid: cfb56d3fb1580ec488b4f1ede4879cc1, type: 3}
+      PoolCapacity: 1
+  - Name: Player 1
+    SpawnerSettings:
+      ObjectPrefab: {fileID: 578175074600701363, guid: 63a1d8e318f6376479b93ade2c2ec774, type: 3}
+      PoolCapacity: 11
+  - Name: Player 2
+    SpawnerSettings:
+      ObjectPrefab: {fileID: 578175074600701363, guid: 94626dd97a70ab64d895ff63b81f3a78, type: 3}
+      PoolCapacity: 11
+  - Name: Referee
+    SpawnerSettings:
+      ObjectPrefab: {fileID: -8999847622762171259, guid: fc8d19e9dc1ef314292b332140f3c3a2, type: 3}
+      PoolCapacity: 3

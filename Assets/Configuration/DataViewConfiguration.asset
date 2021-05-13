@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3139666b6c5835846afb983535dcf4e6, type: 3}
+  m_Name: DataViewConfiguration
+  m_EditorClassIdentifier: 
+  Teams:
+  - Team: 0
+    View:
+      Name: Player 1
+      SpawnerSettings:
+        ObjectPrefab: {fileID: 0}
+        PoolCapacity: 0
+  - Team: 1
+    View:
+      Name: Player 2
+      SpawnerSettings:
+        ObjectPrefab: {fileID: 0}
+        PoolCapacity: 0
+  - Team: 3
+    View:
+      Name: Referee
+      SpawnerSettings:
+        ObjectPrefab: {fileID: 0}
+        PoolCapacity: 0
+  IgnoredTrackingID: 0a0000000f0000001d000000
+  Bounds:
+    X:
+      Min: -55
+      Max: 55
+    Z:
+      Min: -40
+      Max: 40
